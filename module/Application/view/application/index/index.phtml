@@ -1,0 +1,139 @@
+<div class="jumbotron">
+    <h1>Redis <span class="zf-green">REmote DIctionary Server</span></h1>
+    <p>Redis v<?php echo $client->info('Server')['redis_version']; ?>, PHP client v1.8.0</p>
+    <p>
+        Redis is an open source (BSD licensed), in-memory data structure store, used as a database, cache and message broker.
+        It supports data structures such as <strong>strings</strong>, <strong>hashes</strong>, <strong>lists</strong>, <strong>sets</strong>, <strong>sorted sets</strong> with range queries, bitmaps, hyperloglogs
+        and geospatial indexes with radius queries. Redis has built-in <strong>replication</strong>, Lua scripting, LRU eviction, <strong>transactions</strong>
+        and different levels of <strong>on-disk persistence</strong>, and provides high availability via <strong>Redis Sentinel</strong> and automatic
+        partitioning with Redis Cluster.
+    </p>
+</div>
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">KEYS *</h3>
+            </div>
+            <div class="panel-body">
+                <?php foreach($client->executeRawString('KEYS *') as $key) {
+                    echo $key . '<br/>';
+                }; ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">php.ini</h3>
+            </div>
+            <div class="panel-body">
+                <p>session.save_handler = redis</p>
+                <p>session.save_path = "tcp://127.0.0.1:6379?auth=haslo_do_redisa_ustawione_w_jego_configu"</p>
+                <p>$ sudo service apache2 restart</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Session ID <?php echo $session; ?></h3>
+            </div>
+            <div class="panel-body">
+                <p style="word-break: break-all;"><?php echo $client->get('PHPREDIS_SESSION:' . $session); ?></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">$client->get()</h3>
+            </div>
+            <div class="panel-body">
+                <p>imie: <?php echo $client->get('imie'); ?></p>
+                <p>nazwisko: <?php echo $client->get('nazwisko'); ?></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">$client->executeRawString('RPOP fruits')</h3>
+            </div>
+            <div class="panel-body">
+                <p>Fruits counter: <?php echo $client->executeRawString('LLEN fruits'); ?></p>
+                <p>Last fruit (right side of list): <?php echo $client->executeRawString('RPOP fruits'); ?></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">$client->clientList()</h3>
+            </div>
+            <div class="panel-body">
+                <?php foreach ($client->clientList() as $client_id => $client_data ) : ?>
+                    <p><?php echo $client_data['id']; ?> - <?php echo $client_data['addr']; ?> - <?php echo $client_data['cmd']; ?></p>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Memory stats</h3>
+            </div>
+            <div class="panel-body">
+                <pre><?php print_r($client->executeRawString('MEMORY STATS')); ?></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Sandbox</h3>
+            </div>
+            <div class="panel-body">
+                <p><?php var_dump( $client->get('somethingwhate') ); ?></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Any other options?</h3>
+            </div>
+            <div class="panel-body">
+                <p>Apache Cassandra</p>
+                <p>Microsoft Azure Cosmos</p>
+                <p>Firebase</p>
+                <p>MongoDB</p>
+                <p>FoundationDB</p>
+                <p>CouchDB</p>
+                <p>CouchBase</p>
+                <p>Memcached</p>
+                <p>RethinkDB</p>
+                <p>Hazelcast</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php // phpinfo(); ?>
+
